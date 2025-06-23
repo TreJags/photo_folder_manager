@@ -1,0 +1,3 @@
+@echo off
+echo Starting JTK Labs Photo Dir Manager...
+start "" "%~dp0\dist\win-unpacked\JTK Labs Photo Dir Manager.exe"

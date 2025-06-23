@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JTK Labs Photo Dir Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JTK Labs Photo Dir Manager</h1>
+        </header>
+
+        <main>
+            <div class="controls">
+                <div class="control-group">
+                    <h2>Folder Structures</h2>
+                    <div class="structure-controls">
+                        <select id="structure-select">
+                            <option value="">-- Select a structure --</option>
+                        </select>
+                        <button id="new-structure-btn">New Structure</button>
+                        <button id="save-structure-btn">Save Structure</button>
+                        <button id="delete-structure-btn">Delete Structure</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h2>Target Directory</h2>
+                    <div class="directory-controls">
+                        <input type="text" id="directory-path" readonly placeholder="Select a directory...">
+                        <button id="select-directory-btn">Browse...</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <button id="create-folders-btn" class="primary-btn">Create Folder Structure</button>
+                </div>
+            </div>
+
+            <div class="structure-editor">
+                <h2>Structure Editor</h2>
+                <div class="editor-controls">
+                    <input type="text" id="structure-name" placeholder="Structure Name">
+                    <button id="add-folder-btn">Add Folder</button>
+                </div>
+                <div id="structure-tree" class="tree-view"></div>
+            </div>
+        </main>
+
+        <div id="status-bar">Ready</div>
+
+        <!-- Templates for dynamic content -->
+        <template id="folder-item-template">
+            <div class="folder-item">
+                <div class="folder-header">
+                    <span class="folder-toggle">▶</span>
+                    <span class="folder-name"></span>
+                    <div class="folder-actions">
+                        <button class="add-subfolder-btn">Add Subfolder</button>
+                        <button class="delete-folder-btn">Delete</button>
+                    </div>
+                </div>
+                <div class="folder-children"></div>
+            </div>
+        </template>
+
+        <!-- Modal for new folder -->
+        <div id="new-folder-modal" class="modal">
+            <div class="modal-content">
+                <h3>New Folder</h3>
+                <input type="text" id="new-folder-name" placeholder="Folder Name">
+                <div class="modal-actions">
+                    <button id="cancel-new-folder">Cancel</button>
+                    <button id="confirm-new-folder">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>

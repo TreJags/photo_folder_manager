@@ -1,0 +1,44 @@
+{
+  "name": "photo_folder_tool",
+  "version": "1.0.0",
+  "description": "A tool for creating and managing photo folder structures",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "photo",
+    "folder",
+    "structure",
+    "organization"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^36.5.0",
+    "electron-builder": "^24.6.4"
+  },
+  "dependencies": {
+    "electron-store": "^8.2.0"
+  },
+  "build": {
+    "appId": "com.photo_folder_tool",
+    "productName": "JTK Labs Photo Dir Manager",
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "${productName}.exe"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "forceCodeSigning": false
+  }
+}
