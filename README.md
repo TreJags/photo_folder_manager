@@ -10,6 +10,7 @@ A Windows application for creating and managing photo folder structures.
 - Create folder structures on disk
 - Save and recall multiple folder structures
 - Automatically remembers the last used structure
+- Sync RAW files based on selected JPG files
 
 ## Default Folder Structure
 
@@ -54,17 +55,28 @@ To run the application as a Windows executable:
 1. Double-click the `JTK_Labs_Photo_Dir_Manager.bat` file in the project directory
 2. This will launch the application directly without needing to use the command line
 
+### Running from Source (Recommended for Latest Features)
+
+If you're experiencing issues with missing features (like the Sync RAW Files tab), you can run the application directly from source:
+
+1. Double-click the `Run_From_Source.bat` file in the project directory
+2. This will run the application using the latest source code, including all recently added features
+
 ## Building an Executable
 
-To build a Windows executable:
+To build a Windows executable that includes all the latest features:
 
 ```
 npm run build
 ```
 
+**Note**: Building the application requires administrator privileges on Windows to create symbolic links. If you encounter permission errors during the build process, try running the command prompt as an administrator.
+
 The executable will be created in the `dist\win-unpacked` directory as `JTK Labs Photo Dir Manager.exe`.
 
 You can also run this executable directly if you prefer not to use the batch file.
+
+**Important**: If you're using the pre-built executable and don't see the Sync RAW Files tab, it's likely because the executable was built before this feature was added. Use the `Run_From_Source.bat` file to access all the latest features, or rebuild the application following the instructions above.
 
 ## Usage Instructions
 
@@ -85,6 +97,13 @@ You can also run this executable directly if you prefer not to use the batch fil
 4. **Creating Folders on Disk**:
    - Select a target directory using the "Browse..." button
    - Click "Create Folder Structure" to create the folders
+
+5. **Syncing RAW Files**:
+   - Click on the "Sync RAW Files" tab at the top of the application
+   - Select a base directory using the "Browse..." button
+   - The JPG Select, ORF, and Sync RAW directories will be automatically set based on the base directory
+   - Click "Sync RAW Files" to copy matching ORF files to the Sync RAW directory
+   - The application will find ORF files that match the names of JPG files in the Select directory
 
 ## Development
 

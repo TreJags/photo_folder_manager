@@ -12,40 +12,92 @@
             <h1>JTK Labs Photo Dir Manager</h1>
         </header>
 
+        <div class="tabs">
+            <div class="tab active" data-tab="folder-structure">Folder Structure</div>
+            <div class="tab" data-tab="sync-raw">Sync RAW Files</div>
+        </div>
+
         <main>
-            <div class="controls">
-                <div class="control-group">
-                    <h2>Folder Structures</h2>
-                    <div class="structure-controls">
-                        <select id="structure-select">
-                            <option value="">-- Select a structure --</option>
-                        </select>
-                        <button id="new-structure-btn">New Structure</button>
-                        <button id="save-structure-btn">Save Structure</button>
-                        <button id="delete-structure-btn">Delete Structure</button>
+            <!-- Folder Structure Tab -->
+            <div id="folder-structure-tab" class="tab-content active">
+                <div class="controls">
+                    <div class="control-group">
+                        <h2>Folder Structures</h2>
+                        <div class="structure-controls">
+                            <select id="structure-select">
+                                <option value="">-- Select a structure --</option>
+                            </select>
+                            <button id="new-structure-btn">New Structure</button>
+                            <button id="save-structure-btn">Save Structure</button>
+                            <button id="delete-structure-btn">Delete Structure</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <h2>Target Directory</h2>
+                        <div class="directory-controls">
+                            <input type="text" id="directory-path" readonly placeholder="Select a directory...">
+                            <button id="select-directory-btn">Browse...</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <button id="create-folders-btn" class="primary-btn">Create Folder Structure</button>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <h2>Target Directory</h2>
-                    <div class="directory-controls">
-                        <input type="text" id="directory-path" readonly placeholder="Select a directory...">
-                        <button id="select-directory-btn">Browse...</button>
-                    </div>
-                </div>
 
-                <div class="control-group">
-                    <button id="create-folders-btn" class="primary-btn">Create Folder Structure</button>
+                <div class="structure-editor">
+                    <h2>Structure Editor</h2>
+                    <div class="editor-controls">
+                        <input type="text" id="structure-name" placeholder="Structure Name">
+                        <button id="add-folder-btn">Add Folder</button>
+                    </div>
+                    <div id="structure-tree" class="tree-view"></div>
                 </div>
             </div>
 
-            <div class="structure-editor">
-                <h2>Structure Editor</h2>
-                <div class="editor-controls">
-                    <input type="text" id="structure-name" placeholder="Structure Name">
-                    <button id="add-folder-btn">Add Folder</button>
+            <!-- Sync RAW Files Tab -->
+            <div id="sync-raw-tab" class="tab-content">
+                <div class="controls">
+                    <div class="control-group">
+                        <h2>Base Directory</h2>
+                        <div class="directory-controls">
+                            <input type="text" id="sync-base-dir" readonly placeholder="Select base directory...">
+                            <button id="select-sync-base-dir-btn">Browse...</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <h2>Directories</h2>
+                        <div class="directory-controls">
+                            <div class="directory-item">
+                                <label>JPG Select Directory:</label>
+                                <input type="text" id="jpg-select-dir" readonly>
+                            </div>
+                            <div class="directory-item">
+                                <label>ORF Directory:</label>
+                                <input type="text" id="orf-dir" readonly>
+                            </div>
+                            <div class="directory-item">
+                                <label>Sync RAW Directory:</label>
+                                <input type="text" id="sync-raw-dir" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <button id="sync-raw-btn" class="primary-btn">Sync RAW Files</button>
+                    </div>
                 </div>
-                <div id="structure-tree" class="tree-view"></div>
+
+
+                <div class="sync-results">
+                    <h2>Sync Results</h2>
+                    <div id="sync-results-container" class="results-container">
+                        <p>No sync operation has been performed yet.</p>
+                    </div>
+                </div>
             </div>
         </main>
 
@@ -74,6 +126,50 @@
                 <div class="modal-actions">
                     <button id="cancel-new-folder">Cancel</button>
                     <button id="confirm-new-folder">Create</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for About dialog -->
+        <div id="about-modal" class="modal">
+            <div class="modal-content about-content">
+                <h3>About JTK Labs Photo Dir Manager</h3>
+                <div class="about-section">
+                    <h4>Application Overview</h4>
+                    <p>JTK Labs Photo Dir Manager is a utility designed to help photographers organize their photo files efficiently. It provides tools for creating standardized folder structures and synchronizing RAW files with selected JPG images.</p>
+                </div>
+                <div class="about-section">
+                    <h4>Folder Structure Tab</h4>
+                    <p>This tab allows you to create and manage folder structures for your photography projects:</p>
+                    <ul>
+                        <li><strong>Folder Structures:</strong> Save, load, and manage your custom folder structures</li>
+                        <li><strong>Structure Editor:</strong> Create and modify folder hierarchies by adding folders and subfolders</li>
+                        <li><strong>Target Directory:</strong> Select a location where the folder structure will be created</li>
+                    </ul>
+                </div>
+                <div class="about-section">
+                    <h4>Sync RAW Files Tab</h4>
+                    <p>This tab helps you synchronize your RAW files with selected JPG images:</p>
+                    <ul>
+                        <li><strong>Base Directory:</strong> Select the root directory containing your photo folders</li>
+                        <li><strong>JPG Select Directory:</strong> The folder containing your selected JPG files</li>
+                        <li><strong>ORF Directory:</strong> The folder containing your original RAW (ORF) files</li>
+                        <li><strong>Sync RAW Directory:</strong> The destination folder where matching RAW files will be copied</li>
+                    </ul>
+                    <p>The application will find RAW files that match the names of your selected JPG files and copy them to the Sync RAW directory, making it easy to work with only the RAW files you need.</p>
+                </div>
+                <div class="about-section">
+                    <h4>How to Use</h4>
+                    <ol>
+                        <li>Create a folder structure or use the default one</li>
+                        <li>Select a target directory and create the folder structure</li>
+                        <li>Place your JPG and RAW files in their respective folders</li>
+                        <li>Select the JPG files you want to work with</li>
+                        <li>Use the Sync RAW tab to copy only the RAW files that match your selected JPGs</li>
+                    </ol>
+                </div>
+                <div class="modal-actions">
+                    <button id="close-about">Close</button>
                 </div>
             </div>
         </div>
