@@ -64,6 +64,16 @@ If you're experiencing issues with missing features (like the Sync RAW Files tab
 
 ## Building an Executable
 
+There are two ways to build the application:
+
+### Option 1: Using the Build Script (Recommended)
+
+1. Right-click on the `Build_As_Admin.bat` file in the project directory
+2. Select "Run as administrator"
+3. The script will automatically check for prerequisites, install dependencies if needed, and build the application
+
+### Option 2: Manual Build
+
 To build a Windows executable that includes all the latest features:
 
 ```
@@ -72,11 +82,17 @@ npm run build
 
 **Note**: Building the application requires administrator privileges on Windows to create symbolic links. If you encounter permission errors during the build process, try running the command prompt as an administrator.
 
+### Build Output
+
 The executable will be created in the `dist\win-unpacked` directory as `JTK Labs Photo Dir Manager.exe`.
 
 You can also run this executable directly if you prefer not to use the batch file.
 
 **Important**: If you're using the pre-built executable and don't see the Sync RAW Files tab, it's likely because the executable was built before this feature was added. Use the `Run_From_Source.bat` file to access all the latest features, or rebuild the application following the instructions above.
+
+### Detailed Build Instructions
+
+For more detailed instructions on building the application, including troubleshooting common issues, see the [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) file.
 
 ## Usage Instructions
 
