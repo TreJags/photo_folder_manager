@@ -57,8 +57,29 @@ header {
     margin-bottom: 20px;
 }
 
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 h1 {
     color: #2c3e50;
+}
+
+.header-btn {
+    padding: 8px 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.header-btn:hover {
+    background-color: #2980b9;
 }
 
 h2 {
@@ -178,9 +199,10 @@ button:hover {
 .folder-header {
     display: flex;
     align-items: center;
-    padding: 5px;
+    padding: 5px 5px 5px 20px;  /* Added left padding to make room for the toggle */
     border-radius: 4px;
     background-color: #f9f9f9;
+    position: relative;  /* Added for absolute positioning of children */
 }
 
 .folder-header:hover {
@@ -193,6 +215,8 @@ button:hover {
     font-size: 12px;
     width: 15px;
     text-align: center;
+    position: absolute;
+    left: 5px;  /* Adjusted to provide a small offset from the left edge */
 }
 
 .folder-name {
@@ -211,7 +235,7 @@ button:hover {
 }
 
 .folder-children {
-    margin-left: 20px;
+    margin-left: 15px;  /* Adjusted to account for the new toggle position */
     display: none;
 }
 
@@ -234,7 +258,7 @@ button:hover {
     font-weight: 500;
 }
 
-.sync-results {
+.sync-results, .cleanup-results {
     flex: 1;
     min-width: 200px; /* Minimum width */
     max-width: 800px; /* Maximum width */
@@ -428,4 +452,92 @@ button:hover {
 
 .about-section li {
     margin-bottom: 5px;
+}
+
+/* License dialog styles */
+.license-content {
+    width: 700px;
+    max-width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.license-section {
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.license-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.license-header h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #2c3e50;
+}
+
+.effective-date {
+    font-style: italic;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.license-article {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.license-article h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.license-article p {
+    margin-bottom: 10px;
+}
+
+.license-article ul {
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+.license-article li {
+    margin-bottom: 8px;
+}
+
+.license-footer {
+    margin-top: 30px;
+    padding-top: 15px;
+}
+
+.license-footer hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+.contact-info {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.contact-info p {
+    margin-bottom: 0;
+}
+
+.contact-info a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
 }

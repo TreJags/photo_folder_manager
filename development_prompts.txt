@@ -1,0 +1,60 @@
+# JTK Labs Photo Dir Manager - Development Prompts
+
+This file contains all the prompts used during the development of the JTK Labs Photo Dir Manager application, organized chronologically.
+
+## Application UI Prompts
+
+The application's user-facing text is centralized in the `prompts.js` file. These prompts include:
+- Status messages
+- Error messages
+- Dialog titles
+- Button labels
+- Placeholder text
+- Other UI text
+
+## Development History Prompts
+
+The following prompts were used during the development of the application:
+
+### Prompt 1: Compile Application Prompts
+```
+Compile all the prompts for this application and store them in a file in the application directory
+```
+
+This prompt resulted in the creation of the `prompts.js` file, which centralizes all user-facing text in the application.
+
+### Prompt 2: User Guide Button Functionality
+```
+WHen the User Guide button is clicked, open the text from the User_guide file in a pop up window so the rest of the application continues to run
+```
+
+This prompt led to modifications in the `createUserGuideWindow` function in `main.js` to create a window that stays on top of the main window without blocking it.
+
+### Prompt 3: Fix Preload Script Error
+```
+correct the following console error in the app: VM4 sandbox_bundle:2 Unable to load preload script: C:\Engineering\GitRepos\photo_folder_manager\renderer\user-guide-preload.js executeSandboxedPreloadScripts @ VM4 sandbox_bundle:2
+```
+
+This prompt resulted in updating the `main.js` file to reference the `user-guide-preload.js` file in the root directory instead of the one in the renderer directory.
+
+### Prompt 4: Fix Autofill Errors
+```
+COrrect the following errors: [49472:0629/190052.750:ERROR:CONSOLE:1] "Request Autofill.enable failed. {"code":-32601,"message":"'Autofill.enable' wasn't found"}", source: devtools://devtools/bundled/core/protocol_client/protocol_client.js (1)
+[49472:0629/190052.750:ERROR:CONSOLE:1] "Request Autofill.setAddresses failed. {"code":-32601,"message":"'Autofill.setAddresses' wasn't found"}", source: devtools://devtools/bundled/core/protocol_client/protocol_client.js (1
+```
+
+This prompt led to updating the disable-features switch to include both 'AutofillServerCommunication' and 'Autofill' to ensure that all Autofill-related features are disabled.
+
+### Prompt 5: Update User Guide Viewing
+```
+UPdate the view User Guide to work the same way in the application that the License button click views the text.
+```
+
+This prompt resulted in updating the 'open-user-guide' IPC handler to use shell.openPath instead of creating a new window, making it work the same way as the License functionality.
+
+### Prompt 6: Compile Development Prompts
+```
+add all of the prompts done from the building of the application to a text file in the base directory. There are some contents of the prompts in the prompts.js directory also. Pull them all into one text file in ordre, using the History.
+```
+
+This prompt resulted in the creation of this file, which compiles all the prompts used during the development of the application.

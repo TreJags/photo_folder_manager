@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JTK Labs Photo Dir Manager - User Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        h1 {
+            font-size: 2.2em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.3em;
+        }
+        h2 {
+            font-size: 1.8em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.3em;
+        }
+        h3 {
+            font-size: 1.5em;
+        }
+        h4 {
+            font-size: 1.3em;
+        }
+        p {
+            margin: 1em 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        code {
+            background-color: #f8f8f8;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        ul, ol {
+            padding-left: 2em;
+        }
+        li {
+            margin: 0.5em 0;
+        }
+        blockquote {
+            margin: 1em 0;
+            padding: 0 1em;
+            color: #6a737d;
+            border-left: 0.25em solid #dfe2e5;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+        }
+        table, th, td {
+            border: 1px solid #dfe2e5;
+        }
+        th, td {
+            padding: 0.5em 1em;
+            text-align: left;
+        }
+        th {
+            background-color: #f6f8fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="content"></div>
+    </div>
+    <script>
+        // Simple markdown parser
+        function parseMarkdown(markdown) {
+            // Replace headers
+            markdown = markdown.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+            markdown = markdown.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+            markdown = markdown.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+            markdown = markdown.replace(/^#### (.*$)/gm, '<h4>$1</h4>');
+            
+            // Replace links
+            markdown = markdown.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+            
+            // Replace code blocks
+            markdown = markdown.replace(/```([\s\S]*?)```/g, function(match, p1) {
+                return '<pre>' + p1.trim() + '</pre>';
+            });
+            
+            // Replace inline code
+            markdown = markdown.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // Replace lists
+            markdown = markdown.replace(/^\s*-\s*(.*)/gm, '<li>$1</li>');
+            markdown = markdown.replace(/(<li>.*<\/li>\n)+/g, '<ul>$&</ul>');
+            
+            // Replace numbered lists
+            markdown = markdown.replace(/^\s*\d+\.\s*(.*)/gm, '<li>$1</li>');
+            markdown = markdown.replace(/(<li>.*<\/li>\n)+/g, '<ol>$&</ol>');
+            
+            // Replace paragraphs
+            markdown = markdown.replace(/^(?!<[a-z])(.*$)/gm, function(match, p1) {
+                if (p1.trim() === '') return '';
+                return '<p>' + p1 + '</p>';
+            });
+            
+            // Replace bold text
+            markdown = markdown.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            
+            // Replace italic text
+            markdown = markdown.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+            
+            return markdown;
+        }
+
+        // Load and render the markdown content
+        window.addEventListener('DOMContentLoaded', () => {
+            window.api.loadUserGuide().then(content => {
+                document.getElementById('content').innerHTML = parseMarkdown(content);
+            }).catch(error => {
+                document.getElementById('content').innerHTML = `<h1>Error</h1><p>Failed to load User Guide: ${error.message}</p>`;
+            });
+        });
+    </script>
+</body>
+</html>

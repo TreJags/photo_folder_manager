@@ -9,11 +9,16 @@
 <body>
     <div class="container">
         <header>
-            <h1>JTK Labs Photo Dir Manager</h1>
+            <div class="header-content">
+                <h1>JTK Labs Photo Dir Manager</h1>
+                <button id="user-guide-btn" class="header-btn">User Guide</button>
+                <button id="license-btn" class="header-btn">License</button>
+            </div>
         </header>
 
         <div class="tabs">
             <div class="tab active" data-tab="folder-structure">Folder Structure</div>
+            <div class="tab" data-tab="file-cleanup">File Cleanup</div>
             <div class="tab" data-tab="sync-raw">Sync RAW Files</div>
         </div>
 
@@ -54,6 +59,46 @@
                         <button id="add-folder-btn">Add Folder</button>
                     </div>
                     <div id="structure-tree" class="tree-view"></div>
+                </div>
+            </div>
+
+            <!-- File Cleanup Tab -->
+            <div id="file-cleanup-tab" class="tab-content">
+                <div class="controls">
+                    <div class="control-group">
+                        <h2>Base Directory</h2>
+                        <div class="directory-controls">
+                            <input type="text" id="cleanup-base-dir" readonly placeholder="Select base directory...">
+                            <button id="select-cleanup-base-dir-btn">Browse...</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <h2>Locations</h2>
+                        <div class="directory-controls">
+                            <div class="directory-item">
+                                <label>From Location:</label>
+                                <input type="text" id="cleanup-from-dir" readonly>
+                                <button id="select-cleanup-from-dir-btn">Browse...</button>
+                            </div>
+                            <div class="directory-item">
+                                <label>To Location:</label>
+                                <input type="text" id="cleanup-to-dir" readonly>
+                                <button id="select-cleanup-to-dir-btn">Browse...</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <button id="cleanup-files-btn" class="primary-btn">Cleanup Files</button>
+                    </div>
+                </div>
+
+                <div class="cleanup-results">
+                    <h2>Cleanup Results</h2>
+                    <div id="cleanup-results-container" class="results-container">
+                        <p>No cleanup operation has been performed yet.</p>
+                    </div>
                 </div>
             </div>
 
@@ -148,6 +193,16 @@
                     </ul>
                 </div>
                 <div class="about-section">
+                    <h4>File Cleanup Tab</h4>
+                    <p>This tab helps you organize and clean up your photo files:</p>
+                    <ul>
+                        <li><strong>Base Directory:</strong> Select the root directory containing your photo folders</li>
+                        <li><strong>From Location:</strong> The source folder containing files to be moved</li>
+                        <li><strong>To Location:</strong> The destination folder where files will be moved</li>
+                    </ul>
+                    <p>The application allows you to select specific locations for file cleanup operations, making it easy to organize your photo files efficiently.</p>
+                </div>
+                <div class="about-section">
                     <h4>Sync RAW Files Tab</h4>
                     <p>This tab helps you synchronize your RAW files with selected JPG images:</p>
                     <ul>
@@ -170,6 +225,105 @@
                 </div>
                 <div class="modal-actions">
                     <button id="close-about">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for License dialog -->
+        <div id="license-modal" class="modal">
+            <div class="modal-content license-content">
+                <h3>End User License Agreement</h3>
+                <div class="license-section">
+                    <div class="license-header">
+                        <h4>OM-System Custom Settings Configurator</h4>
+                        <p class="effective-date">Effective Date: June 27, 2024</p>
+                    </div>
+
+                    <p>This End User License Agreement ("EULA") is a legal agreement between you (either an individual or a single entity) and Trevor Jager, JTK Labs and Trevor Jager Photography ("Licensor") for the software product identified above, which includes computer software and may include associated media, printed materials, and "online" or electronic documentation ("Software Product").</p>
+
+                    <p>By installing, copying, or otherwise using the Software Product, you agree to be bound by the terms of this EULA. If you do not agree to the terms of this EULA, do not install or use the Software Product.</p>
+
+                    <div class="license-article">
+                        <h4>1. GRANT OF LICENSE</h4>
+                        <p>The Software Product is licensed, not sold. All rights to the Software Product are reserved by the Licensor. This EULA grants you the following limited rights:</p>
+                        <ul>
+                            <li>Installation and Use: You may install and use the Software Product for personal or internal business use only.</li>
+                            <li>Backup Copy: You may make one copy of the Software Product for backup and archival purposes only.</li>
+                            <li>No Distribution Rights: You may not distribute, share, sublicense, lend, lease, or transfer the Software Product to any third party without prior written permission from the Licensor.</li>
+                        </ul>
+                    </div>
+
+                    <div class="license-article">
+                        <h4>2. DESCRIPTION OF OTHER RIGHTS AND LIMITATIONS</h4>
+                        <ul>
+                            <li>Maintenance of Copyright Notices: You must not remove or alter any copyright notices on any copies of the Software Product.</li>
+                            <li>Distribution: You may not distribute copies of the Software Product to any third parties under any circumstances without prior written permission from the Licensor.</li>
+                            <li>Prohibition on Reverse Engineering, Decompilation, and Disassembly: You may not reverse engineer, decompile, or disassemble the Software Product, except and only to the extent that such activity is expressly permitted by applicable law notwithstanding this limitation.</li>
+                            <li>Rental: You may not rent, lease, or lend the Software Product.</li>
+                            <li>Support Services: Licensor may provide you with support services related to the Software Product ("Support Services"). Any supplemental software code provided to you as part of the Support Services shall be considered part of the Software Product and subject to the terms and conditions of this EULA.</li>
+                            <li>Compliance with Applicable Laws: You must comply with all applicable laws regarding use of the Software Product.</li>
+                        </ul>
+                    </div>
+
+                    <div class="license-article">
+                        <h4>3. TERMINATION</h4>
+                        <p>Without prejudice to any other rights, Licensor may terminate this EULA if you fail to comply with the terms and conditions of this EULA. In such event, you must destroy all copies of the Software Product in your possession.</p>
+                    </div>
+
+                    <div class="license-article">
+                        <h4>4. COPYRIGHT</h4>
+                        <p>All title, including but not limited to copyrights, in and to the Software Product and any copies thereof are owned by Licensor or its suppliers. All title and intellectual property rights in and to the content which may be accessed through use of the Software Product is the property of the respective content owner and may be protected by applicable copyright or other intellectual property laws and treaties. This EULA grants you no rights to use such content. All rights not expressly granted are reserved by Licensor.</p>
+                    </div>
+
+                    <div class="license-article">
+                        <h4>5. NO WARRANTIES</h4>
+                        <p>Licensor expressly disclaims any warranty for the Software Product. The Software Product is provided 'As Is' without any express or implied warranty of any kind, including but not limited to any warranties of merchantability, noninfringement, or fitness of a particular purpose. Licensor does not warrant or assume responsibility for the accuracy or completeness of any information, text, graphics, links or other items contained within the Software Product. Licensor makes no warranties respecting any harm that may be caused by the transmission of a computer virus, worm, time bomb, logic bomb, or other such computer program. Licensor further expressly disclaims any warranty or representation to Authorized Users or to any third party.</p>
+                    </div>
+
+                    <div class="license-article">
+                        <h4>6. LIMITATION OF LIABILITY</h4>
+                        <p>In no event shall Licensor be liable for any damages (including, without limitation, lost profits, business interruption, or lost information) rising out of Authorized Users' use of or inability to use the Software Product, even if Licensor has been advised of the possibility of such damages. In no event will Licensor be liable for loss of data or for indirect, special, incidental, consequential (including lost profit), or other damages based in contract, tort or otherwise. Licensor shall have no liability with respect to the content of the Software Product or any part thereof, including but not limited to errors or omissions contained therein, libel, infringements of rights of publicity, privacy, trademark rights, business interruption, personal injury, loss of privacy, moral rights or the disclosure of confidential information.</p>
+                    </div>
+
+                    <div class="license-article">
+                        <h4>7. GOVERNING LAW</h4>
+                        <p>This EULA shall be governed by the laws of the jurisdiction in which the Licensor is located, excluding its conflicts of law rules.</p>
+                    </div>
+
+                    <div class="license-article">
+                        <h4>8. ENTIRE AGREEMENT</h4>
+                        <p>This EULA constitutes the entire agreement between you and Licensor relating to the Software Product and supersedes all prior or contemporaneous understandings regarding such subject matter. No amendment to or modification of this EULA will be binding unless in writing and signed by Licensor.</p>
+                    </div>
+
+                    <div class="license-footer">
+                        <hr>
+                        <p>By installing, copying, or otherwise using the Software Product, you acknowledge that you have read this EULA, understand it, and agree to be bound by its terms and conditions.</p>
+
+                        <div class="contact-info">
+                            <p><strong>Contact Information:</strong><br>
+                            Trevor Jager<br>
+                            JTK Labs and Trevor Jager Photography<br>
+                            Email: <a href="mailto:jtklabs@mchsi.com">jtklabs@mchsi.com</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button id="view-license-file">View License File</button>
+                    <button id="close-license">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for User Guide dialog -->
+        <div id="user-guide-modal" class="modal">
+            <div class="modal-content user-guide-content">
+                <h3>JTK Labs Photo Dir Manager - User Guide</h3>
+                <div id="user-guide-content" class="user-guide-section">
+                    <!-- User guide content will be loaded here -->
+                    <p>Loading user guide...</p>
+                </div>
+                <div class="modal-actions">
+                    <button id="close-user-guide">Close</button>
                 </div>
             </div>
         </div>

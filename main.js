@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const Store = require('electron-store');
@@ -19,13 +19,17 @@ if (!fs.existsSync(cachePath)) {
 
 app.commandLine.appendSwitch('disk-cache-dir', cachePath);
 
+// Disable Autofill to prevent DevTools errors
+app.commandLine.appendSwitch('disable-features', 'AutofillServerCommunication,Autofill');
+
 // Initialize the store for saving application settings
 const store = new Store({
   name: 'photo-folder-tool-settings',
   defaults: {
     lastUsedStructure: null,
     savedStructures: [],
-    lastBaseDirectory: null
+    lastBaseDirectory: null,
+    lastTargetDirectory: null
   }
 });
 
@@ -85,6 +89,24 @@ function createMenu() {
       label: 'Help',
       submenu: [
         {
+          label: 'User Guide',
+          click: async () => {
+            const mainWindow = BrowserWindow.getFocusedWindow();
+            if (mainWindow) {
+              mainWindow.webContents.send('show-user-guide');
+            }
+          }
+        },
+        {
+          label: 'License',
+          click: async () => {
+            const mainWindow = BrowserWindow.getFocusedWindow();
+            if (mainWindow) {
+              mainWindow.webContents.send('show-license');
+            }
+          }
+        },
+        {
           label: 'About',
           click: async () => {
             const mainWindow = BrowserWindow.getFocusedWindow();
@@ -123,47 +145,69 @@ app.on('window-all-closed', () => {
 // IPC Handlers for communication with renderer process
 // Select directory handler
 ipcMain.handle('select-directory', async () => {
-  const { canceled, filePaths } = await dialog.showOpenDialog({
-    properties: ['openDirectory']
-  });
+  try {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      properties: ['openDirectory']
+    });
 
-  if (canceled) {
+    if (canceled) {
+      return null;
+    }
+
+    return filePaths[0];
+  } catch (error) {
+    console.error('Error selecting directory:', error);
     return null;
   }
-
-  return filePaths[0];
 });
 
 // Save folder structure handler
 ipcMain.handle('save-structure', (event, { name, structure }) => {
-  const savedStructures = store.get('savedStructures');
-  const existingIndex = savedStructures.findIndex(s => s.name === name);
+  try {
+    const savedStructures = store.get('savedStructures');
+    const existingIndex = savedStructures.findIndex(s => s.name === name);
 
-  if (existingIndex >= 0) {
-    savedStructures[existingIndex] = { name, structure };
-  } else {
-    savedStructures.push({ name, structure });
+    if (existingIndex >= 0) {
+      savedStructures[existingIndex] = { name, structure };
+    } else {
+      savedStructures.push({ name, structure });
+    }
+
+    store.set('savedStructures', savedStructures);
+    store.set('lastUsedStructure', name);
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving structure:', error);
+    return { success: false, error: error.message };
   }
-
-  store.set('savedStructures', savedStructures);
-  store.set('lastUsedStructure', name);
-
-  return { success: true };
 });
 
 // Get saved structures handler
 ipcMain.handle('get-saved-structures', () => {
-  return {
-    structures: store.get('savedStructures'),
-    lastUsed: store.get('lastUsedStructure')
-  };
+  try {
+    return {
+      structures: store.get('savedStructures'),
+      lastUsed: store.get('lastUsedStructure')
+    };
+  } catch (error) {
+    console.error('Error getting saved structures:', error);
+    return {
+      structures: [],
+      lastUsed: null
+    };
+  }
 });
 
 // Create folder structure handler
 ipcMain.handle('create-folder-structure', async (event, { basePath, structure }) => {
   try {
-    await createFolderStructure(basePath, structure);
-    return { success: true };
+    const result = await createFolderStructure(basePath, structure);
+    return { 
+      success: true,
+      created: result.created,
+      existing: result.existing
+    };
   } catch (error) {
     return { success: false, error: error.message };
   }
@@ -171,32 +215,224 @@ ipcMain.handle('create-folder-structure', async (event, { basePath, structure })
 
 // Recursive function to create folder structure
 async function createFolderStructure(basePath, structure) {
+  let created = [];
+  let existing = [];
+
   for (const folder of structure) {
     const folderPath = path.join(basePath, folder.name);
 
     // Create the folder if it doesn't exist
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath, { recursive: true });
+      created.push(folderPath);
+    } else {
+      existing.push(folderPath);
     }
 
     // Create subfolders if they exist
     if (folder.children && folder.children.length > 0) {
-      await createFolderStructure(folderPath, folder.children);
+      const result = await createFolderStructure(folderPath, folder.children);
+      created = created.concat(result.created);
+      existing = existing.concat(result.existing);
     }
   }
+
+  return { created, existing };
 }
 
 // Save base directory handler
 ipcMain.handle('save-base-directory', (event, directory) => {
-  store.set('lastBaseDirectory', directory);
-  return { success: true };
+  try {
+    store.set('lastBaseDirectory', directory);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving base directory:', error);
+    return { success: false, error: error.message };
+  }
 });
 
 // Get last base directory handler
 ipcMain.handle('get-last-base-directory', () => {
-  return {
-    lastBaseDirectory: store.get('lastBaseDirectory')
-  };
+  try {
+    return {
+      lastBaseDirectory: store.get('lastBaseDirectory')
+    };
+  } catch (error) {
+    console.error('Error getting last base directory:', error);
+    return {
+      lastBaseDirectory: null
+    };
+  }
+});
+
+// Save target directory handler
+ipcMain.handle('save-target-directory', (event, directory) => {
+  try {
+    store.set('lastTargetDirectory', directory);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving target directory:', error);
+    return { success: false, error: error.message };
+  }
+});
+
+// Get last target directory handler
+ipcMain.handle('get-last-target-directory', () => {
+  try {
+    return {
+      lastTargetDirectory: store.get('lastTargetDirectory')
+    };
+  } catch (error) {
+    console.error('Error getting last target directory:', error);
+    return {
+      lastTargetDirectory: null
+    };
+  }
+});
+
+// Open user guide
+ipcMain.handle('open-user-guide', async () => {
+  try {
+    const userGuidePath = path.join(__dirname, 'USER_GUIDE.md');
+
+    // Check if the USER_GUIDE.md file exists
+    if (!fs.existsSync(userGuidePath)) {
+      throw new Error(`User Guide file not found: ${userGuidePath}`);
+    }
+
+    await shell.openPath(userGuidePath);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+});
+
+
+// Open license
+ipcMain.handle('open-license', async () => {
+  try {
+    const licensePath = path.join(__dirname, 'LICENSE');
+    await shell.openPath(licensePath);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+});
+
+// Move files (not directories) from one location to another
+ipcMain.handle('move-files', async (event, { baseDir, fromDir, toDir }) => {
+  try {
+    // Promisify fs functions
+    const readdir = promisify(fs.readdir);
+    const rename = promisify(fs.rename);
+    const stat = promisify(fs.stat);
+
+    // Resolve full paths
+    const fromDirPath = path.isAbsolute(fromDir) ? fromDir : path.join(baseDir, fromDir);
+    const toDirPath = path.isAbsolute(toDir) ? toDir : path.join(baseDir, toDir);
+
+    // Create destination directory if it doesn't exist
+    if (!fs.existsSync(toDirPath)) {
+      fs.mkdirSync(toDirPath, { recursive: true });
+    }
+
+    // Get all items from the source directory
+    const items = await readdir(fromDirPath);
+
+    // Track success and failures
+    const results = {
+      success: true,
+      moved: 0,
+      failed: 0,
+      errors: [],
+      total: items.length,
+      completed: 0
+    };
+
+    // Send initial progress update
+    event.sender.send('move-progress', {
+      ...results,
+      currentFile: '',
+      status: 'starting'
+    });
+
+    // Process each item
+    for (const item of items) {
+      const fromPath = path.join(fromDirPath, item);
+      const toPath = path.join(toDirPath, item);
+
+      // Send progress update for current item
+      event.sender.send('move-progress', {
+        ...results,
+        currentFile: item,
+        status: 'processing'
+      });
+
+      try {
+        // Check if the item is a file (not a directory)
+        const stats = await stat(fromPath);
+
+        if (stats.isFile()) {
+          // Move the file to the destination directory
+          await rename(fromPath, toPath);
+          results.moved++;
+
+          // Send progress update for successful move
+          event.sender.send('move-progress', {
+            ...results,
+            currentFile: item,
+            status: 'moved'
+          });
+        } else {
+          // Skip directories
+          results.failed++;
+          results.errors.push(`Skipped directory: ${item}`);
+
+          // Send progress update for skipped directory
+          event.sender.send('move-progress', {
+            ...results,
+            currentFile: item,
+            status: 'skipped',
+            error: 'Item is a directory'
+          });
+        }
+      } catch (error) {
+        results.failed++;
+        results.errors.push(`Failed to move ${item}: ${error.message}`);
+
+        // Send progress update for failed move
+        event.sender.send('move-progress', {
+          ...results,
+          currentFile: item,
+          status: 'error',
+          error: error.message
+        });
+      }
+
+      // Update completed count
+      results.completed++;
+    }
+
+    // Send final progress update
+    event.sender.send('move-progress', {
+      ...results,
+      status: 'completed'
+    });
+
+    return results;
+  } catch (error) {
+    // Send error progress update
+    event.sender.send('move-progress', {
+      success: false,
+      error: error.message,
+      status: 'error'
+    });
+
+    return {
+      success: false,
+      error: error.message
+    };
+  }
 });
 
 // Copy matching ORF files based on JPG files in Select directory
